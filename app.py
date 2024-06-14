@@ -55,16 +55,14 @@ def login():
     userData = cursor.fetchone()
     # print(userData['user_type'])
     if userData:
-        if sha256_crypt.verify(check_password, userData['password']) and userData['user_type'] == 1:
-            cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-            userInfo = cursor.fetchone()
-            res = {"user_type": "buyer"}
-            return jsonify(res), 201
-        elif sha256_crypt.verify(check_password, userData['password']) and userData['user_type'] == 2:
-            cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-            userInfo = cursor.fetchone()
-            res = {"user_type": "seller"}
-            return jsonify(res), 201
+        if sha256_crypt.verify(check_password, userData['password']) and (user_type == userData['user_type']):
+            
+            if user_type == 1:
+                res = {"user_type": "buyer"}
+                return jsonify(res), 200
+            else:
+                res = {"user_type": "seller"}
+                return jsonify(res), 200
         else:
             return jsonify({"status": "Invalid Credentials!"}), 401
     else:
