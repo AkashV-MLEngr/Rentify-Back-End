@@ -6,7 +6,8 @@ from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
+cors = CORS(app, resources={r'*': {'origins': '*'}}) # http://localhost:3000
 
 dbConnection = mysql.connector.connect(
     host='localhost',
@@ -178,10 +179,10 @@ def likeAction():
 #     pass
 
 # ======================log out====================
-# @app.route("/logout", methods=['GET'])
-# def logout():
-#     session.clear()
-#     return redirect(url_for('index'))
+@app.route("/api/logout")
+def logout():
+    res = {"message": "Successfully logged out"}
+    return jsonify(res), 200
 
 
 if __name__ == '__main__':
